@@ -28,11 +28,6 @@ public class ParticipantService {
 		return (Participant) session.get(Participant.class, login);
 	}
 
-//	public void add(Participant participant) {
-//		Transaction transaction = this.session.beginTransaction();
-//		session.save(participant);
-//		transaction.commit();
-//	}
 
 	public Participant add(Participant participant){
 		Transaction transaction = this.session.beginTransaction();
