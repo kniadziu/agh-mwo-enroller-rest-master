@@ -38,7 +38,7 @@ public class MeetingService {
 		return meeting;
 	}
 
-
+//kasuj spotkanie
 	public Meeting delete(Meeting meeting){
 		Transaction transaction = this.session.beginTransaction();
 		session.delete(meeting);
