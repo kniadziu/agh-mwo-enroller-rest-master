@@ -40,6 +40,14 @@ public class ParticipantService {
 		Transaction transaction = this.session.beginTransaction();
 		session.delete(participant);
 		transaction.commit();
+
+	}
+
+	public void update(Participant participant) {
+		Transaction transaction = this.session.beginTransaction();
+		session.update(participant);
+		transaction.commit();
+		//return participant;
 	}
 }
 //		lub tak:
