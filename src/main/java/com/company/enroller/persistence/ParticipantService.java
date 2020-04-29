@@ -25,6 +25,7 @@ public class ParticipantService {
 	}
 
 	public Participant findByLogin(String login) {
+
 		return (Participant) session.get(Participant.class, login);
 	}
 

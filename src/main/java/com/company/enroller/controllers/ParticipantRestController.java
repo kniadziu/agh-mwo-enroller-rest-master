@@ -74,6 +74,7 @@ public class ParticipantRestController {
 
 	participantService.update(foundParticipant);
 		//System.out.println(login);
+
 	return new ResponseEntity<Participant>(HttpStatus.OK);
 	}
 
