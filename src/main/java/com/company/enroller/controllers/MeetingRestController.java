@@ -4,6 +4,7 @@ import com.company.enroller.model.Meeting;
 import com.company.enroller.model.Participant;
 import com.company.enroller.persistence.MeetingService;
 import com.company.enroller.persistence.ParticipantService;
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class MeetingRestController {
     ParticipantService participantService;
 
 
-    //1.1 Pobieranie listy wszystkich spotkań
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> getMeetings() {
-        Collection<Meeting> meetings = meetingService.getAll();
-        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
-    }
+    //1.1 Pobieranie listy wszystkich spotkań, omentarz z powodu rozbudowy f-cji w pkt 4.1 - dodano sortowanie
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ResponseEntity<?> getMeetings() {
+//        Collection<Meeting> meetings = meetingService.getAll();
+//        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+//    }
 
     //1.2. Pobierz spotkanie o id:
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -101,7 +102,7 @@ public class MeetingRestController {
         return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
     }
 
-    //2.3 usun uczestnika ze spotkania
+    //3.3 usun uczestnika ze spotkania
 
     @RequestMapping(value = "/{meetingId}/participants/{login}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteParticipantFormMeeting(@PathVariable("meetingId") long meetingId, @PathVariable("login") String login){
@@ -124,4 +125,20 @@ public class MeetingRestController {
         meetingService.update(meeting);
         return new ResponseEntity<Participant>(foundParticipant, HttpStatus.OK);
     }
+
+    //4. Wersja PREMIUM (dodatkowo do GOLD)
+    //4.1 Sortowanie listy spotkań po tytule spotkania
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<?> sortMeetingsByTitle(@RequestParam(value="sort", defaultValue = "") String sortMode) {
+
+        Collection<Meeting> meetings = meetingService.getSortetMeetingsByTitle();
+        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+    }
+
+
+    //4.2. Przeszukiwanie listy spotkań po tytule i opisie (na zasadzie substring)
+    //4.3 Przeszukiwanie listy spotkań po zapisanym uczestniku spotkania
+
+
+
 }

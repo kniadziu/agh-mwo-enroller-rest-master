@@ -18,19 +18,22 @@ public class MeetingService {
 		//connector = DatabaseConnector.getInstance();
 		session = DatabaseConnector.getInstance().getSession();
 	}
-//pobierz wszystkie spotkania
+
+	//================================================================================
+	//1. WERSJA BASIC
+	//1.1. Pobieranie listy wszystkich spotkań
 	public Collection<Meeting> getAll() {
-		String hql = "FROM Meeting BY LOWER(title)";
+		String hql = "FROM Meeting";
 		Query query = this.session.createQuery(hql);
 		return query.list();
 	}
 
-//znajdz spotkanie o danym id
+	//1.2. Pobieranie listy pojedyncznego spotkania
 	public Meeting findById(long id){
 		return (Meeting) this.session.get(Meeting.class, id);
 	}
 
-//dodaj nowe spotkanie
+	//1.3 Dodawanie spotkań
 	public Meeting add(Meeting meeting){
 		Transaction transaction = this.session.beginTransaction();
 		session.save(meeting);
@@ -38,7 +41,9 @@ public class MeetingService {
 		return meeting;
 	}
 
-//kasuj spotkanie
+//================================================================
+	//3/. Wersja GOLD
+	//3.1. Usuwanie spotkań
 	public Meeting delete(Meeting meeting){
 		Transaction transaction = this.session.beginTransaction();
 		session.delete(meeting);
@@ -46,13 +51,27 @@ public class MeetingService {
 		return meeting;
 	}
 
-	//zaktualizuj spotkanie
+	//3.2. Aktualizację spotkań
 	public Meeting update(Meeting meeting) {
 		Transaction transaction = this.session.beginTransaction();
 		session.update(meeting);
 		transaction.commit();
 		return meeting;
 	}
+
+
+	//4. Wersja PREMIUM (dodatkowo do GOLD)
+	//4.1 Sortowanie listy spotkań po tytule spotkania
+	public Collection<Meeting> getSortetMeetingsByTitle() {
+		String hql = "FROM Meeting ORDER BY LOWER(title)";
+		Query query = this.session.createQuery(hql);
+		return query.list();
+	}
+
+
+
+	//4.2. Przeszukiwanie listy spotkań po tytule i opisie (na zasadzie substring)
+	//4.3 Przeszukiwanie listy spotkań po zapisanym uczestniku spotkania
 
 
 }
