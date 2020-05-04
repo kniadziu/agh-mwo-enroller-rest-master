@@ -71,8 +71,22 @@ public class MeetingService {
 
 
 	//4.2. Przeszukiwanie listy spotkań po tytule i opisie (na zasadzie substring)
+	public Collection<Meeting> findMeetingsByTitleAndDescription(String title, String description){
+		String hql="FROM Meeting as meeting WHERE title LIKE :title AND description LIKE :description" ;
+		Query query=this.session.createQuery(hql);
+		query.setParameter("title","%"+title+"%");
+		query.setParameter("description","%"+description+"%");
+		return query.list();
+	}
+
 	//4.3 Przeszukiwanie listy spotkań po zapisanym uczestniku spotkania
 
+	public Collection<Meeting> findMeetingsByLogin(String login){
+		String hql="FROM Meeting as meeting WHERE :login in elements(participants)" ;
+		Query query=this.session.createQuery(hql);
+		query.setParameter("login","%"+login+"%");
+		return query.list();
+	}
 
 }
 

@@ -128,15 +128,26 @@ public class MeetingRestController {
 
     //4. Wersja PREMIUM (dodatkowo do GOLD)
     //4.1 Sortowanie listy spotkań po tytule spotkania
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> sortMeetingsByTitle(@RequestParam(value="sort", defaultValue = "") String sortMode) {
+    // http://localhost:8080/meetings?sort="title"  - sortuje po tytule
+    // http://localhost:8080/meetings  - brak sortowanie - domyślne
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ResponseEntity<?> sortMeetingsByTitle(@RequestParam(value="sort", defaultValue = "") String sortMode) {
+//
+//        Collection<Meeting> meetings = meetingService.getSortetMeetingsByTitle();
+//        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+//    }
 
-        Collection<Meeting> meetings = meetingService.getSortetMeetingsByTitle();
+    //4.2. Przeszukiwanie listy spotkań po tytule i opisie (na zasadzie substring)
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<?> findMeetingsByTitleAndDescription(
+            @RequestParam(value="title", defaultValue = "") String title,
+            @RequestParam(value="description", defaultValue = "") String description) {
+
+        Collection<Meeting> meetings = meetingService.findMeetingsByTitleAndDescription(title, description);
         return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
     }
 
-
-    //4.2. Przeszukiwanie listy spotkań po tytule i opisie (na zasadzie substring)
     //4.3 Przeszukiwanie listy spotkań po zapisanym uczestniku spotkania
 
 
