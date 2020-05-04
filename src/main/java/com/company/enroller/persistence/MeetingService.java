@@ -20,7 +20,7 @@ public class MeetingService {
 	}
 //pobierz wszystkie spotkania
 	public Collection<Meeting> getAll() {
-		String hql = "FROM Meeting";
+		String hql = "FROM Meeting BY LOWER(title)";
 		Query query = this.session.createQuery(hql);
 		return query.list();
 	}
@@ -42,6 +42,14 @@ public class MeetingService {
 	public Meeting delete(Meeting meeting){
 		Transaction transaction = this.session.beginTransaction();
 		session.delete(meeting);
+		transaction.commit();
+		return meeting;
+	}
+
+	//zaktualizuj spotkanie
+	public Meeting update(Meeting meeting) {
+		Transaction transaction = this.session.beginTransaction();
+		session.update(meeting);
 		transaction.commit();
 		return meeting;
 	}
