@@ -95,9 +95,19 @@ public class MeetingService {
 
 	public Collection<Meeting> findMeetingsByTitleDescriptionLogin(String title,
 																   String description,
-																   Participant participant, String sort){
+																   Participant participant,
+																   String sort){
 		//tworzenie zlozonego zapytania:
-		String hql="FROM Meeting as meeting WHERE title LIKE :title AND description LIKE :description" ;
+
+		String hql="FROM Meeting as meeting WHERE title LIKE :title AND description LIKE :description " ;
+
+//		if (title!=null) {
+//			hql += " as meeting WHERE title LIKE :title ";
+//		}
+
+//		if (description!=null) {
+//			hql += " as meeting WHERE title LIKE :title ";
+//		}
 
 		if (participant!=null) {
 			hql += " AND :participant in elements(participants) ";
@@ -110,7 +120,14 @@ public class MeetingService {
 		Query query=this.session.createQuery(hql);
 		query.setParameter("title", "%" + title + "%");
 		query.setParameter("description", "%" + description + "%");
+		if (participant!=null) {
 		query.setParameter("participant", participant);
+		}
+//		query.setParameter("title", "%" + title + "%").setParameter("description", "%" + description + "%");
+//		if (participant!=null) {
+//			query.setParameter("participant", participant);
+//		}
+
 
 		return query.list();
 	}

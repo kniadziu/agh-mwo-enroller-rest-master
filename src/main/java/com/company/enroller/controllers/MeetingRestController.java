@@ -167,17 +167,17 @@ public class MeetingRestController {
    //4.4 Wyszukiwanie po nazwie title, description i login
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> findMeetingsbyTitleDescriptionLogin(
-            @RequestParam(value="participantLogin", defaultValue ="") String participantLogin,
+    public ResponseEntity<?> findMeetingsbyTitleDescriptionLog(
             @RequestParam(value="title", defaultValue = "") String title,
             @RequestParam(value="description", defaultValue = "") String description,
+            @RequestParam(value="participantLogin", defaultValue ="") String participantLogin,
             @RequestParam(value="sort", defaultValue = "") String sort)
     {
         Participant foundParticipant = null;
         if (!participantLogin.isEmpty()) {
             foundParticipant = participantService.findByLogin(participantLogin);
             if (foundParticipant == null) {
-                return new ResponseEntity("Nie mogę znaleźć uczestnika" + participantLogin, HttpStatus.NOT_FOUND);
+                return new ResponseEntity("Nie mogę znaleźć uczestnika: " + participantLogin, HttpStatus.NOT_FOUND);
             }
         }
         Collection<Meeting> meetings = meetingService.findMeetingsByTitleDescriptionLogin(title,description,foundParticipant, sort);
