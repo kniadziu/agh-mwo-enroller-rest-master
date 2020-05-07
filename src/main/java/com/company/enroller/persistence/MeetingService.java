@@ -1,6 +1,7 @@
 package com.company.enroller.persistence;
 
 import com.company.enroller.model.Meeting;
+import com.company.enroller.model.Participant;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -81,12 +82,39 @@ public class MeetingService {
 
 	//4.3 Przeszukiwanie listy spotkań po zapisanym uczestniku spotkania
 
-	public Collection<Meeting> findMeetingsByLogin(String login){
-		String hql="FROM Meeting as meeting WHERE :login in elements(participants)" ;
+	public Collection<Meeting> findMeetingsByLogin(Participant participant){
+		String hql="FROM Meeting as meeting WHERE :participant in elements(participants)";
 		Query query=this.session.createQuery(hql);
-		query.setParameter("login","%"+login+"%");
+		if (participant!=null){
+			query.setParameter("participant", participant);
+		}
 		return query.list();
 	}
+
+	//4.4 Szukaj spotkan w oparciu o title, description ,login oraz sortowanie
+
+	public Collection<Meeting> findMeetingsByTitleDescriptionLogin(String title,
+																   String description,
+																   Participant participant, String sort){
+		//tworzenie zlozonego zapytania:
+		String hql="FROM Meeting as meeting WHERE title LIKE :title AND description LIKE :description" ;
+
+		if (participant!=null) {
+			hql += " AND :participant in elements(participants) ";
+		}
+		if (sort.equals("title")){
+			hql+=" ORDER by title";
+		}
+
+		//wstawienie parametrow zapytania do query:
+		Query query=this.session.createQuery(hql);
+		query.setParameter("title", "%" + title + "%");
+		query.setParameter("description", "%" + description + "%");
+		query.setParameter("participant", participant);
+
+		return query.list();
+	}
+
 
 }
 

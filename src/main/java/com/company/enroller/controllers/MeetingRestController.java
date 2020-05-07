@@ -139,16 +139,50 @@ public class MeetingRestController {
 
     //4.2. Przeszukiwanie listy spotkań po tytule i opisie (na zasadzie substring)
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> findMeetingsByTitleAndDescription(
-            @RequestParam(value="title", defaultValue = "") String title,
-            @RequestParam(value="description", defaultValue = "") String description) {
-
-        Collection<Meeting> meetings = meetingService.findMeetingsByTitleAndDescription(title, description);
-        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
-    }
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ResponseEntity<?> findMeetingsByTitleAndDescription(
+//            @RequestParam(value="title", defaultValue = "") String title,
+//            @RequestParam(value="description", defaultValue = "") String description) {
+//
+//        Collection<Meeting> meetings = meetingService.findMeetingsByTitleAndDescription(title, description);
+//        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+//    }
 
     //4.3 Przeszukiwanie listy spotkań po zapisanym uczestniku spotkania
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ResponseEntity<?> findMeetingsForParticipantLogin(
+//                    @RequestParam(value="participantLogin", defaultValue ="") String participantLogin) {
+//        Participant foundParticipant = null;
+//        if (!participantLogin.isEmpty()) {
+//            foundParticipant = participantService.findByLogin(participantLogin);
+//            if (foundParticipant == null) {
+//                return new ResponseEntity("Nie mogę znaleźć uczestnika" + participantLogin, HttpStatus.NOT_FOUND);
+//            }
+//
+//        }
+//        Collection<Meeting> meetings = meetingService.findMeetingsByLogin(foundParticipant);
+//        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+//    }
+
+   //4.4 Wyszukiwanie po nazwie title, description i login
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<?> findMeetingsbyTitleDescriptionLogin(
+            @RequestParam(value="participantLogin", defaultValue ="") String participantLogin,
+            @RequestParam(value="title", defaultValue = "") String title,
+            @RequestParam(value="description", defaultValue = "") String description,
+            @RequestParam(value="sort", defaultValue = "") String sort)
+    {
+        Participant foundParticipant = null;
+        if (!participantLogin.isEmpty()) {
+            foundParticipant = participantService.findByLogin(participantLogin);
+            if (foundParticipant == null) {
+                return new ResponseEntity("Nie mogę znaleźć uczestnika" + participantLogin, HttpStatus.NOT_FOUND);
+            }
+        }
+        Collection<Meeting> meetings = meetingService.findMeetingsByTitleDescriptionLogin(title,description,foundParticipant, sort);
+        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+    }
 
 
 
